@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% block content %}
+      <form class="form-signin" action="/login" method="post">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <span class="error">{{ error }}</span>
+
+        <label for="username">Username<span class="required">*</span></label>
+        <input type="text" name="username" id="username" class="form-control" placeholder="Username" autofocus>
+
+        <label for="inputPassword">Password<span class="required">*</span></label>
+        <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Enter Password">
+        
+        <label for="confPassword">Confirm Password<span class="required">*</span></label>
+        <input type="password" name="confPassword" id="confPassword" class="form-control" placeholder="Confirm Password">
+        
+        <label for="inputEmail">Email address</label>
+        <input type="text" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address">
+
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+      </form>
+
+{% endblock %}
