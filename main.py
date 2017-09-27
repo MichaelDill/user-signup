@@ -15,21 +15,31 @@ app.config['DEBUG'] = True
 def index():
 
     error = request.args.get("error")
+    usernameError = request.args.get("unE")
+    if not usernameError:
+        usernameError = ""
+    
+    passwordError = request.args.get("pwE")
+    if not passwordError:
+        passwordError = ""
+
+    confPassWordError = request.args.get("cPwE")
+    if not confPassWordError:
+        confPassWordError = ""
+    emailError = request.args.get("emE")
+    if not emailError:
+        emailError = ""
+
 
     if error:
-        error_esc = (cgi.escape(error, quote=True)).split(",")
 
-        error_element = '<ul>'
+        body = jinja_env.get_template('index.html')
+        return body.render(usernameError=usernameError,passwordError=passwordError,confPassWordError=confPassWordError,emailError=emailError)
 
-        for msg in error_esc:
-            error_element += '<li>' + msg + '</li>'
-
-        error_element += '</ul>'
     else:
-        error_element = ''
 
-    body = jinja_env.get_template('index.html')
-    return body.render(error = error_element)
+        body = jinja_env.get_template('index.html')
+        return body.render(usernameError="",passwordError="",confPassWordError="",emailError="")
 
 
 @app.route("/login", methods=['POST'])
@@ -43,36 +53,36 @@ def login():
     confPassword = request.form['confPassword']
 
     error = False
-    errorMsg ="Error Details:"
+    errorMsg ="true"
 
     if username == "":
         error = True
-        errorMsg += ",Please enter a username"
+        errorMsg += "&unE=Please enter a username"
     elif len(username) < 3 or len(username) > 20:
         error = True
-        errorMsg += ",Pleae enter a valid username"
+        errorMsg += "&unE=Pleae enter a valid username"
     elif " " in username:
         error = True
-        errorMsg += ",Pleae enter a valid username"
+        errorMsg += "&unE=Pleae enter a valid username"
 
     if password == "":
         error = True
-        errorMsg += ",Please enter a password"
+        errorMsg += "&pwE=Please enter a password"
     elif len(password) < 3 or len(password) > 20:
         error = True
-        errorMsg += ",Pleae enter a valid password"
+        errorMsg += "&pwE=Pleae enter a valid password"
     elif " " in password:
         error = True
-        errorMsg += ",Pleae enter a valid password"
+        errorMsg += "&pwE=Pleae enter a valid password"
     else:
         if confPassword != password:
             error = True
-            errorMsg += ",Please confirm your password"
+            errorMsg += "&cPwE=Please confirm your password"
 
     if email != "":
         if "@" not in email or "." not in email or len(email) < 3 or len(email) > 20:
             error = True
-            errorMsg += ",Please enter a valid email"
+            errorMsg += "&emE=Please enter a valid email"
 
 
     if error == True:
