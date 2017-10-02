@@ -4,6 +4,9 @@ import cgi
 import jinja2
 from flask import Flask, request, redirect
 import string
+
+
+
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
@@ -30,16 +33,19 @@ def index():
     if not emailError:
         emailError = ""
 
+    username = request.args.get("un")
+    if not username:
+        username = ""
 
     if error:
 
         body = jinja_env.get_template('index.html')
-        return body.render(usernameError=usernameError,passwordError=passwordError,confPassWordError=confPassWordError,emailError=emailError)
+        return body.render(usernameError=usernameError,passwordError=passwordError,confPassWordError=confPassWordError,emailError=emailError,username=username)
 
     else:
 
         body = jinja_env.get_template('index.html')
-        return body.render(usernameError="",passwordError="",confPassWordError="",emailError="")
+        return body.render(usernameError="",passwordError="",confPassWordError="",emailError="",username="")
 
 
 @app.route("/login", methods=['POST'])
@@ -86,7 +92,7 @@ def login():
 
 
     if error == True:
-        return redirect("/?error=" + errorMsg)
+        return redirect("/?error=" + errorMsg + "&un=" + username)
     else:
         body = jinja_env.get_template('login.html')
         return body.render()
